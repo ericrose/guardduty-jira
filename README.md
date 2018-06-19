@@ -47,7 +47,6 @@ Once you have created the role update _guardduty-jira/Makefile_ to match the arn
   ```
 
 2. Update the configs.yml 
-## What again?:
   * jira_project -- your jira project
   * issuetype -- an existing issue type from your jira
   * region -- the region that your secret exists in
