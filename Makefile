@@ -1,7 +1,7 @@
 PROJECT = guardduty-jira
 FUNCTION = $(PROJECT)
 REGION = us-east-1
-IAMROLE = arn:aws:iam::947365572083:role/LambdaBasic
+IAMROLE = arn:aws:iam::XXXXXXXXXXXX:role/LambdaBasic
 
 .phony: clean
 
