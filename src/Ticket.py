@@ -82,7 +82,7 @@ class Ticket(BaseClass):
         return {self.LABELS_KEY: self.CONFIGS['labels']}
 
     def get_summary_field(self): 
-        return {self.SUMMARY_KEY: "[GuardDuty] {0}: {1}".format(self.incident_number, self.summary)}
+        return {self.SUMMARY_KEY: "[GuardDuty] {}".format(self.summary)}
 
     def get_description_field(self): 
         return {self.DESCRIPTION_KEY: "*CURRENTLY*\nGuardDuty has triggered an alert\n{0}\n\n*PROBLEM*\n{1}\n\n*SOLUTION*\n* Investigate the alert.\n* Resolve the GuardDuty finding\n* Create future tickets as necessary".format(self.guard_duty_link, self.summary)}

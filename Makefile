@@ -17,7 +17,7 @@ build-dev: clean
 	virtualenv $(FUNCTION)-dev
 	. $(FUNCTION)-dev/bin/activate; pip install -r requirements.txt;\
 	cd site-packages; cp -r $$VIRTUAL_ENV/lib/python3.6/dist-packages ./;\
-	cd dist-packages; zip -r9 ../../$(FUNCTION)-dev.zip . -x "*pip*" "*setuptools*";\
+	cd dist-packages; zip -r9 ../../$(FUNCTION)-dev.zip . -x "*pip*" "*setuptools*" "*wheel*" "easy_install.py";\
 
 create-dev:
 	aws lambda create-function \
