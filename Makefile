@@ -1,9 +1,9 @@
 PROJECT = guardduty-jira
 FUNCTION = $(PROJECT)
 REGION = us-east-1
-IAMROLE = arn:aws:iam::947365572083:role/JiraLambda
+IAMROLE = arn:aws:iam::XXXXXXXXXXX:role/JiraLambda
 EVENTRULE = GuardDutyEventRule
-EVENTRULEARN = arn:aws:events:us-east-1:947365572083:rule/GuardDutyEventRule
+EVENTRULEARN = arn:aws:events:us-east-1:XXXXXXXXXXX:rule/GuardDutyEventRule
 PYTHONVERSION = python3.6
 
 .phony: clean

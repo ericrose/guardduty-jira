@@ -41,10 +41,8 @@ Once you have created the role update _guardduty-jira/Makefile_ to match the arn
 
 ## 
 
-1. Fork this project into your account and clone into local directory
-  ``` bash 
-  git clone git@github.com:<your_github_handle>/guardduty-jira.git
-  ```
+1. Create a Cloudwatch Event Rule to match on GuardDuty Findings then update 
+the Makefile with the name and ARN of the event rule 
 
 2. Update the configs.yml 
   * jira_project -- your jira project
