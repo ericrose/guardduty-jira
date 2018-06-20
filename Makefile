@@ -1,7 +1,9 @@
 PROJECT = guardduty-jira
 FUNCTION = $(PROJECT)
 REGION = us-east-1
-IAMROLE = arn:aws:iam::XXXXXXXXXXXX:role/LambdaBasic
+IAMROLE = arn:aws:iam::947365572083:role/JiraLambda
+EVENTRULE = GuardDutyEventRule
+EVENTRULEARN = arn:aws:events:us-east-1:947365572083:rule/GuardDutyEventRule
 
 .phony: clean
 
@@ -19,8 +21,8 @@ build-dev: clean
 	cd site-packages; cp -r $$VIRTUAL_ENV/lib/python3.6/dist-packages ./;\
 	cd dist-packages; zip -r9 ../../$(FUNCTION)-dev.zip . -x "*pip*" "*setuptools*" "*wheel*" "easy_install.py";\
 
-create-dev:
-	aws lambda create-function \
+create-dev: build-dev
+	$(eval LAMBDAFN := $(shell aws lambda create-function \
 		--handler main.lambda_handler \
 		--function-name $(FUNCTION)-dev \
 		--region $(REGION) \
@@ -28,7 +30,13 @@ create-dev:
 		--role $(IAMROLE) \
 		--runtime python3.6 \
 		--timeout 120 \
-		--memory-size 512 \
+		--memory-size 512 | jq .FunctionArn))
+	@echo $(LAMBDAFN) 
+	aws events put-targets --rule $(EVENTRULE) --targets "Id"="JiraTarget","Arn"=$(LAMBDAFN)
+	aws lambda add-permission --function-name $(FUNCTION)-dev \
+	    --statement-id gd-event2jira --principal events.amazonaws.com \
+	    --action 'lambda:InvokeFunction' \
+	    --source-arn $(EVENTRULEARN)
 
 update-dev:
 	aws lambda update-function-code \
@@ -38,3 +46,4 @@ update-dev:
 
 delete-dev:
 	aws lambda delete-function --function-name $(FUNCTION)-dev
+	aws events remove-targets --rule $(EVENTRULE) --ids "JiraTarget"
