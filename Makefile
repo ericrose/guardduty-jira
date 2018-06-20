@@ -4,6 +4,7 @@ REGION = us-east-1
 IAMROLE = arn:aws:iam::947365572083:role/JiraLambda
 EVENTRULE = GuardDutyEventRule
 EVENTRULEARN = arn:aws:events:us-east-1:947365572083:rule/GuardDutyEventRule
+PYTHONVERSION = python3.6
 
 .phony: clean
 
@@ -16,9 +17,9 @@ clean:
 build-dev: clean
 	cd src; zip -r ../$(FUNCTION)-dev.zip . -x "*.git*" "tests/*";\
 	cd ..; mkdir -p site-packages
-	virtualenv $(FUNCTION)-dev
+	virtualenv -p $(PYTHONVERSION) $(FUNCTION)-dev
 	. $(FUNCTION)-dev/bin/activate; pip install -r requirements.txt;\
-	cd site-packages; cp -r $$VIRTUAL_ENV/lib/python3.6/dist-packages ./;\
+	cd site-packages; cp -r $$VIRTUAL_ENV/lib/$(PYTHONVERSION)/dist-packages ./;\
 	cd dist-packages; zip -r9 ../../$(FUNCTION)-dev.zip . -x "*pip*" "*setuptools*" "*wheel*" "easy_install.py";\
 
 create-dev: build-dev
@@ -28,7 +29,7 @@ create-dev: build-dev
 		--region $(REGION) \
 		--zip-file fileb://$(FUNCTION)-dev.zip \
 		--role $(IAMROLE) \
-		--runtime python3.6 \
+		--runtime $(PYTHONVERSION) \
 		--timeout 120 \
 		--memory-size 512 | jq .FunctionArn))
 	@echo $(LAMBDAFN) 
